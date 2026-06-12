@@ -86,7 +86,6 @@
   box-shadow: 0 4px 16px rgba(124, 58, 237, 0.35);
 }
 
-/* hamburger (mobile) */
 .hamburger {
   display: none;
   flex-direction: column;

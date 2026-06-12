@@ -1,0 +1,42 @@
+.loginFooter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 22px;
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  margin-top: auto;
+}
+
+.footerLinks {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.footerLink {
+  color: var(--text-muted);
+  font-size: 12px;
+  text-decoration: none;
+  display: inline-block;
+  transition: color 0.25s;
+}
+
+.footerLink:hover {
+  color: var(--accent);
+}
+
+.footerDivider {
+  width: 120px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  transform-origin: center;
+}
+
+.footerCopy {
+  color: var(--text-muted);
+  font-size: 11.5px;
+  letter-spacing: 0.2px;
+}
