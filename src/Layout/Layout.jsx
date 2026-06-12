@@ -9,18 +9,12 @@ function useCursorGlow() {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
-    const move = (e) => {
-      cursorX.set(e.clientX)
-      cursorY.set(e.clientY)
-      if (!isVisible) setIsVisible(true)
-    }
+    const move = (e) => { cursorX.set(e.clientX); cursorY.set(e.clientY); if (!isVisible) setIsVisible(true) }
     const leave = () => setIsVisible(false)
     const enter = () => setIsVisible(true)
-
     window.addEventListener('mousemove', move)
     document.documentElement.addEventListener('mouseleave', leave)
     document.documentElement.addEventListener('mouseenter', enter)
-
     return () => {
       window.removeEventListener('mousemove', move)
       document.documentElement.removeEventListener('mouseleave', leave)
@@ -33,13 +27,8 @@ function useCursorGlow() {
 
 function CursorGlow({ cursorX, cursorY, isVisible }) {
   const [isDesktop, setIsDesktop] = useState(false)
-
-  useEffect(() => {
-    setIsDesktop(window.matchMedia('(pointer: fine)').matches)
-  }, [])
-
+  useEffect(() => { setIsDesktop(window.matchMedia('(pointer: fine)').matches) }, [])
   if (!isDesktop) return null
-
   return (
     <motion.div
       className={styles.cursorGlow}
@@ -85,7 +74,6 @@ function ParallaxOrb({ x, y, size, color, speed = 0.3, floatRange = 40, floatDur
   const { scrollY } = useScroll()
   const parallaxY = useTransform(scrollY, [0, 3000], [0, -3000 * speed])
   const springParallaxY = useSpring(parallaxY, { stiffness: 60, damping: 25 })
-
   return (
     <motion.div
       ref={ref}
@@ -118,13 +106,9 @@ export default function Layout({ children }) {
 
       <Navbar />
 
-      <motion.main
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      >
+      <main>
         {children}
-      </motion.main>
+      </main>
     </>
   )
 }

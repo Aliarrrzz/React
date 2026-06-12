@@ -1,48 +1,34 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { navigate } from '../../App'
 import styles from './Navbar.module.css'
 
 const navVariants = {
   hidden: { y: -80, opacity: 0 },
   visible: {
-    y: 0,
-    opacity: 1,
+    y: 0, opacity: 1,
     transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
   },
 }
 
 const linkContainerVariants = {
   hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.08, delayChildren: 0.35 },
-  },
+  visible: { transition: { staggerChildren: 0.08, delayChildren: 0.35 } },
 }
 
 const linkVariants = {
-  hidden: { y: -12, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-    transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
-  },
+  hidden:  { y: -12, opacity: 0 },
+  visible: { y: 0,   opacity: 1, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
 }
 
 const ctaVariants = {
-  hidden: { scale: 0.7, opacity: 0 },
-  visible: {
-    scale: 1,
-    opacity: 1,
-    transition: { duration: 0.6, ease: [0.34, 1.56, 0.64, 1], delay: 0.6 },
-  },
+  hidden:  { scale: 0.7, opacity: 0 },
+  visible: { scale: 1,   opacity: 1, transition: { duration: 0.6, ease: [0.34, 1.56, 0.64, 1], delay: 0.6 } },
 }
 
 const logoVariants = {
-  hidden: { x: -24, opacity: 0 },
-  visible: {
-    x: 0,
-    opacity: 1,
-    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.2 },
-  },
+  hidden:  { x: -24, opacity: 0 },
+  visible: { x: 0,   opacity: 1, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.2 } },
 }
 
 const LINKS = [
@@ -58,13 +44,10 @@ function getActiveLabelFromPath(pathname) {
 }
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false)
-  const [activeLink, setActiveLink] = useState(() =>
-    getActiveLabelFromPath(window.location.pathname)
-  )
-  const [hoveredLink, setHoveredLink] = useState(null)
-
-  const [menuOpen, setMenuOpen] = useState(false)
+  const [scrolled,     setScrolled]     = useState(false)
+  const [activeLink,   setActiveLink]   = useState(() => getActiveLabelFromPath(window.location.pathname))
+  const [hoveredLink,  setHoveredLink]  = useState(null)
+  const [menuOpen,     setMenuOpen]     = useState(false)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
@@ -73,12 +56,23 @@ export default function Navbar() {
   }, [])
 
   useEffect(() => {
-    const onResize = () => {
-      if (window.innerWidth > 700) setMenuOpen(false)
-    }
+    const onPop = () => setActiveLink(getActiveLabelFromPath(window.location.pathname))
+    window.addEventListener('popstate', onPop)
+    return () => window.removeEventListener('popstate', onPop)
+  }, [])
+
+  useEffect(() => {
+    const onResize = () => { if (window.innerWidth > 700) setMenuOpen(false) }
     window.addEventListener('resize', onResize)
     return () => window.removeEventListener('resize', onResize)
   }, [])
+
+  function handleNav(e, href, label) {
+    e.preventDefault()
+    setActiveLink(label)
+    setMenuOpen(false)
+    navigate(href)
+  }
 
   return (
     <motion.header
@@ -90,21 +84,19 @@ export default function Navbar() {
       <motion.div
         className={styles.navPill}
         animate={{
-          background: scrolled
-            ? 'rgba(255,255,255,0.16)'
-            : 'rgba(255,255,255,0.10)',
+          background: scrolled ? 'rgba(255,255,255,0.16)' : 'rgba(255,255,255,0.10)',
           boxShadow: scrolled
             ? '0 8px 40px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.12)'
             : '0 8px 32px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.10)',
         }}
         transition={{ duration: 0.4 }}
       >
-
         <motion.div className={styles.logo} variants={logoVariants}>
           <motion.span
+            onClick={(e) => handleNav(e, '/', 'Home')}
             whileHover={{ scale: 1.05, color: '#a78bfa' }}
             transition={{ type: 'spring', stiffness: 400, damping: 15 }}
-            style={{ display: 'inline-block', cursor: 'default' }}
+            style={{ display: 'inline-block', cursor: 'pointer' }}
           >
             Ali Site
           </motion.span>
@@ -124,7 +116,7 @@ export default function Navbar() {
               variants={linkVariants}
               onHoverStart={() => setHoveredLink(link.label)}
               onHoverEnd={() => setHoveredLink(null)}
-              onClick={() => setActiveLink(link.label)}
+              onClick={(e) => handleNav(e, link.href, link.label)}
               style={{ position: 'relative' }}
               whileTap={{ scale: 0.95 }}
             >
@@ -160,6 +152,7 @@ export default function Navbar() {
           variants={ctaVariants}
           initial="hidden"
           animate="visible"
+          onClick={(e) => handleNav(e, '/login', '')}
           whileHover={{
             scale: 1.06,
             boxShadow: '0 12px 32px rgba(124,58,237,0.60)',
@@ -183,9 +176,9 @@ export default function Navbar() {
           aria-label="Toggle menu"
           whileTap={{ scale: 0.9 }}
         >
-          <span className={menuOpen ? styles.barTop + ' ' + styles.barTopOpen : styles.barTop} />
-          <span className={menuOpen ? styles.barMid + ' ' + styles.barMidOpen : styles.barMid} />
-          <span className={menuOpen ? styles.barBot + ' ' + styles.barBotOpen : styles.barBot} />
+          <span className={menuOpen ? `${styles.barTop} ${styles.barTopOpen}` : styles.barTop} />
+          <span className={menuOpen ? `${styles.barMid} ${styles.barMidOpen}` : styles.barMid} />
+          <span className={menuOpen ? `${styles.barBot} ${styles.barBotOpen}` : styles.barBot} />
         </motion.button>
       </motion.div>
 
@@ -194,8 +187,8 @@ export default function Navbar() {
           <motion.div
             className={styles.mobileMenu}
             initial={{ opacity: 0, y: -12, scale: 0.97 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -12, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0,   scale: 1    }}
+            exit={{   opacity: 0, y: -12,  scale: 0.97 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
           >
             {LINKS.map((link) => (
@@ -203,10 +196,7 @@ export default function Navbar() {
                 key={link.label}
                 href={link.href}
                 className={activeLink === link.label ? styles.mobileActive : styles.mobileLink}
-                onClick={() => {
-                  setActiveLink(link.label)
-                  setMenuOpen(false)
-                }}
+                onClick={(e) => handleNav(e, link.href, link.label)}
               >
                 {link.label}
               </a>
