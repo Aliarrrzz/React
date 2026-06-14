@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import Layout  from './Layout/Layout'
-import Home    from './pages/Home/Home'
-import Login   from './pages/Login/Login'
-import Signup  from './pages/Signup/Signup'
+import Layout   from './Layout/Layout'
+import Home     from './pages/Home/Home'
+import Login    from './pages/Login/Login'
+import Signup   from './pages/Signup/Signup'
+import Contact  from './pages/Contact/Contact'
 
 const pageVariants = {
   initial: { opacity: 0, y: 12, filter: 'blur(4px)' },
@@ -23,8 +24,9 @@ export function navigate(to) {
 }
 
 function CurrentPage({ path }) {
-  if (path === '/login')  return <Login />
-  if (path === '/signup') return <Signup />
+  if (path === '/login')   return <Login />
+  if (path === '/signup')  return <Signup />
+  if (path === '/contact') return <Contact />
   return <Home />
 }
 

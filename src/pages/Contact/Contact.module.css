@@ -1,0 +1,23 @@
+.contactWrapper {
+  position: relative;
+  z-index: 5;
+}
+
+.contactSection {
+  position: relative;
+  z-index: 5;
+  max-width: 960px;
+  margin: 0 auto 100px;
+  padding: 0 24px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 28px;
+  align-items: start;
+}
+
+@media (max-width: 720px) {
+  .contactSection {
+    grid-template-columns: 1fr;
+  }
+}
