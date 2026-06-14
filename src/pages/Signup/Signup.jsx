@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import styles from './Login.module.css'
-import LoginCard   from '../../components/Login/Card/LoginCard'
-import LoginFooter from '../../Layout/Footer/Footer'
+import styles from './Signup.module.css'
+import SignupCard   from '../../components/Signup/Card/SignupCard'
+import LoginFooter  from '../../Layout/Footer/Footer'
 
 const wrapVariants = {
   initial: { opacity: 0, y: 22, scale: 0.97 },
@@ -16,7 +16,7 @@ const wrapVariants = {
   },
 }
 
-export default function Login() {
+export default function Signup() {
   const [shake, setShake] = useState(false)
 
   function triggerShake() {
@@ -25,15 +25,15 @@ export default function Login() {
   }
 
   return (
-    <div className={styles.loginWrapper}>
+    <div className={styles.signupWrapper}>
       <motion.div
-        className={styles.loginWrap}
+        className={styles.signupWrap}
         variants={wrapVariants}
         initial="initial"
         animate="animate"
         exit="exit"
       >
-        <LoginCard shake={shake} onShake={triggerShake} />
+        <SignupCard shake={shake} onShake={triggerShake} />
       </motion.div>
 
       <LoginFooter />

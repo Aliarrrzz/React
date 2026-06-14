@@ -1,31 +1,32 @@
-import { useState, useEffect, useRef } from 'react'
-import { motion, AnimatePresence, useMotionValue, useTransform, animate } from 'framer-motion'
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import styles from './LoginForm.module.css'
 
 const fieldVariants = {
-  hidden:  { opacity: 0, x: -18, filter: 'blur(4px)' },
-  visible: { opacity: 1, x: 0,   filter: 'blur(0px)',
-    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
+  initial: { opacity: 0, x: -18, filter: 'blur(4px)' },
+  animate: {
+    opacity: 1, x: 0, filter: 'blur(0px)',
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+  },
+  exit: { opacity: 0 },
 }
 
 const formVariants = {
-  hidden:  {},
-  visible: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
+  initial: {},
+  animate: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
+  exit:    {},
 }
 
-function AnimatedInput({ icon, id, type, placeholder, value, onChange,
-                         autoComplete, rightSlot }) {
+function AnimatedInput({ icon, id, type, placeholder, value, onChange, autoComplete, rightSlot }) {
   const [focused, setFocused] = useState(false)
-  const active = focused || value.length > 0
 
   return (
     <motion.div
       className={styles.field}
       variants={fieldVariants}
-      animate={focused ? { scale: 1.015 } : { scale: 1 }}
+      animate={focused ? { scale: 1.015 } : undefined}
       transition={{ type: 'spring', stiffness: 300, damping: 22 }}
     >
-
       <motion.span
         className={styles.fieldIcon}
         animate={{ opacity: focused ? 1 : 0.5, scale: focused ? 1.15 : 1 }}
@@ -52,7 +53,7 @@ function AnimatedInput({ icon, id, type, placeholder, value, onChange,
             className={styles.focusRing}
             initial={{ opacity: 0, scale: 0.92 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{   opacity: 0, scale: 0.92 }}
+            exit={{ opacity: 0, scale: 0.92 }}
             transition={{ duration: 0.25 }}
           />
         )}
@@ -63,24 +64,19 @@ function AnimatedInput({ icon, id, type, placeholder, value, onChange,
   )
 }
 
-function SubmitButton({ isReady, isSubmitting, progress }) {
+function SubmitButton({ isReady, isSubmitting }) {
   return (
     <motion.button
       type="submit"
       className={styles.submitBtn}
       disabled={!isReady || isSubmitting}
-      whileHover={isReady && !isSubmitting
-        ? { y: -3, boxShadow: '0 20px 48px rgba(124,58,237,0.6)' }
-        : {}}
+      whileHover={isReady && !isSubmitting ? { y: -3, boxShadow: '0 20px 48px rgba(124,58,237,0.6)' } : {}}
       whileTap={isReady && !isSubmitting ? { scale: 0.97 } : {}}
       transition={{ type: 'spring', stiffness: 400, damping: 20 }}
     >
-
       <motion.span
         className={styles.btnShimmer}
-        animate={isReady && !isSubmitting
-          ? { x: ['-120%', '220%'] }
-          : { x: '-120%' }}
+        animate={isReady && !isSubmitting ? { x: ['-120%', '220%'] } : { x: '-120%' }}
         transition={{ duration: 1.6, repeat: Infinity, repeatDelay: 1.8, ease: 'easeInOut' }}
       />
 
@@ -101,7 +97,7 @@ function SubmitButton({ isReady, isSubmitting, progress }) {
           key={isSubmitting ? 'loading' : 'idle'}
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{   opacity: 0, y: -8 }}
+          exit={{ opacity: 0, y: -8 }}
           transition={{ duration: 0.22 }}
           style={{ position: 'relative', zIndex: 1 }}
         >
@@ -123,13 +119,12 @@ function SubmitButton({ isReady, isSubmitting, progress }) {
   )
 }
 
-
 export default function LoginForm({ onShake }) {
-  const [email,        setEmail]        = useState('')
-  const [password,     setPassword]     = useState('')
-  const [showPass,     setShowPass]     = useState(false)
-  const [remember,     setRemember]     = useState(false)
-  const [msg,          setMsg]          = useState({ text: '', type: '' })
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [showPass, setShowPass] = useState(false)
+  const [remember, setRemember] = useState(false)
+  const [msg, setMsg] = useState({ text: '', type: '' })
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const isReady = email.trim().length > 0 && password.length > 0
@@ -144,29 +139,6 @@ export default function LoginForm({ onShake }) {
     setIsSubmitting(true)
     setMsg({ text: '', type: '' })
 
-    // ── Real API call (uncomment when backend ready) ──
-    // try {
-    //   const res  = await fetch('/auth/login', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify({ email, password }),
-    //   })
-    //   const data = await res.json()
-    //   if (res.ok) {
-    //     localStorage.setItem('accessToken', data.accessToken)
-    //     if (data.user) localStorage.setItem('user', JSON.stringify(data.user))
-    //     if (remember)  localStorage.setItem('rememberMe', 'true')
-    //     showMsg('🎉 Welcome back! Redirecting…', 'success')
-    //     setTimeout(() => window.location.replace('/'), 1600)
-    //   } else {
-    //     showMsg(data.message || '❌ Incorrect email or password', 'error')
-    //     onShake(); setIsSubmitting(false)
-    //   }
-    // } catch {
-    //   showMsg('🚫 Server unavailable — try again', 'error')
-    //   setIsSubmitting(false)
-    // }
-
     setTimeout(() => {
       showMsg('⚠️ Backend not connected yet', 'error')
       onShake()
@@ -180,10 +152,7 @@ export default function LoginForm({ onShake }) {
       onSubmit={handleSubmit}
       noValidate
       variants={formVariants}
-      initial="hidden"
-      animate="visible"
     >
-
       <AnimatedInput
         icon="✉️"
         id="email"
@@ -228,8 +197,8 @@ export default function LoginForm({ onShake }) {
                 <motion.span
                   key={showPass ? 'hide' : 'show'}
                   initial={{ opacity: 0, rotate: -30, scale: 0.7 }}
-                  animate={{ opacity: 1, rotate: 0,   scale: 1 }}
-                  exit={{   opacity: 0, rotate:  30,  scale: 0.7 }}
+                  animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                  exit={{ opacity: 0, rotate: 30, scale: 0.7 }}
                   transition={{ duration: 0.2 }}
                   style={{ display: 'inline-block' }}
                 >
@@ -249,9 +218,7 @@ export default function LoginForm({ onShake }) {
       >
         <motion.div
           className={styles.checkboxWrap}
-          animate={remember
-            ? { scale: [1, 1.2, 1], transition: { duration: 0.3 } }
-            : {}}
+          animate={remember ? { scale: [1, 1.2, 1], transition: { duration: 0.3 } } : {}}
         >
           <input
             type="checkbox"
@@ -264,7 +231,7 @@ export default function LoginForm({ onShake }) {
                 className={styles.checkMark}
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                exit={{   scale: 0, opacity: 0 }}
+                exit={{ scale: 0, opacity: 0 }}
                 transition={{ type: 'spring', stiffness: 500, damping: 20 }}
               >
                 ✓
@@ -280,11 +247,10 @@ export default function LoginForm({ onShake }) {
           <motion.div
             className={`${styles.msg} ${styles[msg.type]}`}
             initial={{ opacity: 0, y: -10, scale: 0.96 }}
-            animate={{ opacity: 1,  y: 0,  scale: 1 }}
-            exit={{   opacity: 0,  y: -10, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.96 }}
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
           >
-
             {msg.type === 'error' && (
               <motion.span
                 className={styles.msgPulse}

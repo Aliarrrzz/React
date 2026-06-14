@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
-import LoginForm from '../From/LoginForm'
-import styles from './LoginCard.module.css'
+import SignupForm from '../Form/SignupForm'
+import styles from './SignupCard.module.css'
 import { navigate } from '../../../App'
 
 const contentVariants = {
@@ -26,9 +26,9 @@ const iconVariants = {
   },
 }
 
-export default function LoginCard({ shake, onShake }) {
+export default function SignupCard({ shake, onShake }) {
   return (
-    <div className={`${styles.loginCard} ${shake ? styles.shake : ''}`}>
+    <div className={`${styles.signupCard} ${shake ? styles.shake : ''}`}>
       <motion.div
         className={styles.cardIcon}
         variants={iconVariants}
@@ -40,7 +40,7 @@ export default function LoginCard({ shake, onShake }) {
           transition: { duration: 0.55, ease: 'easeInOut' },
         }}
       >
-        🔐
+        ✨
       </motion.div>
 
       <motion.div
@@ -49,7 +49,7 @@ export default function LoginCard({ shake, onShake }) {
         animate="animate"
       >
         <motion.h1 className={styles.cardTitle} variants={itemVariants}>
-          {'Welcome '.split('').map((char, i) => (
+          {'Create '.split('').map((char, i) => (
             <motion.span
               key={i}
               style={{ display: 'inline-block' }}
@@ -59,7 +59,7 @@ export default function LoginCard({ shake, onShake }) {
             </motion.span>
           ))}
           <span className={styles.gradientWord}>
-            {'Back'.split('').map((char, i) => (
+            {'Account'.split('').map((char, i) => (
               <motion.span
                 key={i}
                 style={{ display: 'inline-block' }}
@@ -72,11 +72,11 @@ export default function LoginCard({ shake, onShake }) {
         </motion.h1>
 
         <motion.p className={styles.cardSub} variants={itemVariants}>
-          Sign in to your Ali Site account
+          Join Ali Site — it only takes a minute
         </motion.p>
 
         <motion.div variants={itemVariants}>
-          <LoginForm onShake={onShake} />
+          <SignupForm onShake={onShake} />
         </motion.div>
 
         <motion.div className={styles.divider} variants={itemVariants}>
@@ -84,18 +84,18 @@ export default function LoginCard({ shake, onShake }) {
             animate={{ opacity: [0.5, 1, 0.5] }}
             transition={{ duration: 2.5, repeat: Infinity }}
           >
-            new here?
+            already a member?
           </motion.span>
         </motion.div>
 
-        <motion.div className={styles.signupLink} variants={itemVariants}>
+        <motion.div className={styles.loginLink} variants={itemVariants}>
           <motion.a
-            href="/signup"
-            onClick={(e) => { e.preventDefault(); navigate('/signup') }}
+            href="/login"
+            onClick={(e) => { e.preventDefault(); navigate('/login') }}
             whileHover={{ x: 4, color: '#67e8f9' }}
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
           >
-            Create an account →
+            Sign in to your account →
           </motion.a>
         </motion.div>
 
@@ -105,7 +105,7 @@ export default function LoginCard({ shake, onShake }) {
           animate={{ opacity: [0.45, 0.65, 0.45] }}
           transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
         >
-          By signing in you agree to our{' '}
+          By signing up you agree to our{' '}
           <a href="/terms">Terms</a> and <a href="/privacy">Privacy Policy</a>
         </motion.div>
       </motion.div>

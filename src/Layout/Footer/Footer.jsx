@@ -2,21 +2,30 @@ import { motion } from 'framer-motion'
 import styles from './Footer.module.css'
 
 const footerVariants = {
-  hidden:  { opacity: 0, y: 16 },
-  visible: {
+  initial: { opacity: 0, y: 16 },
+  animate: {
     opacity: 1, y: 0,
-    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 1.1 },
+    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.3 },
   },
+  exit: { opacity: 0, y: 8, transition: { duration: 0.2 } },
 }
 
-const linkVariants = {
-  hidden:  {},
-  visible: { transition: { staggerChildren: 0.08, delayChildren: 1.4 } },
+const linkContainerVariants = {
+  initial: {},
+  animate: { transition: { staggerChildren: 0.08, delayChildren: 0.5 } },
+  exit:    {},
 }
 
 const itemVariants = {
-  hidden:  { opacity: 0, y: 8 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
+  initial: { opacity: 0, y: 8 },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
+  exit:    { opacity: 0, y: 4 },
+}
+
+const dividerVariants = {
+  initial: { scaleX: 0, opacity: 0 },
+  animate: { scaleX: 1, opacity: 1, transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.6 } },
+  exit:    { scaleX: 0, opacity: 0 },
 }
 
 const links = [
@@ -30,17 +39,12 @@ export default function LoginFooter() {
     <motion.footer
       className={styles.loginFooter}
       variants={footerVariants}
-      initial="hidden"
-      animate="visible"
     >
-
       <motion.div
         className={styles.footerLinks}
-        variants={linkVariants}
-        initial="hidden"
-        animate="visible"
+        variants={linkContainerVariants}
       >
-        {links.map(({ label, href }, i) => (
+        {links.map(({ label, href }) => (
           <motion.a
             key={label}
             href={href}
@@ -56,9 +60,7 @@ export default function LoginFooter() {
 
       <motion.div
         className={styles.footerDivider}
-        initial={{ scaleX: 0, opacity: 0 }}
-        animate={{ scaleX: 1, opacity: 1 }}
-        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 1.3 }}
+        variants={dividerVariants}
       />
 
       <motion.span

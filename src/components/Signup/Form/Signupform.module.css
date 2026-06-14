@@ -1,0 +1,187 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.field {
+  position: relative;
+  will-change: transform;
+}
+
+.fieldIcon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 15px;
+  pointer-events: none;
+  z-index: 2;
+  transition: opacity 0.25s;
+}
+
+.field input {
+  width: 100%;
+  padding: 14px 44px 14px 42px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.3s, background 0.3s;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+}
+
+.field input::placeholder {
+  color: var(--text-muted);
+}
+
+.field input:focus {
+  border-color: var(--accent);
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.focusRing {
+  position: absolute;
+  inset: -2px;
+  border-radius: 16px;
+  border: 1.5px solid rgba(167, 139, 250, 0.5);
+  box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.12);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.toggleEye {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 15px;
+  opacity: 0.45;
+  z-index: 2;
+  background: none;
+  border: none;
+  color: inherit;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.strengthWrap {
+  display: flex;
+  gap: 5px;
+  margin-top: -4px;
+}
+
+.strengthSeg {
+  flex: 1;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  transition: background 0.4s;
+}
+
+.weak   { background: #f43f5e; }
+.fair   { background: #fb923c; }
+.good   { background: #facc15; }
+.strong { background: #34d399; }
+
+.msg {
+  padding: 13px 16px;
+  border-radius: 14px;
+  font-size: 13.5px;
+  font-weight: 600;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.msgPulse {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid rgba(244, 63, 94, 0.5);
+  pointer-events: none;
+}
+
+.error {
+  background: rgba(244, 63, 94, 0.12);
+  color: #fb7185;
+  border: 1px solid rgba(244, 63, 94, 0.25);
+}
+
+.success {
+  background: rgba(52, 211, 153, 0.12);
+  color: #34d399;
+  border: 1px solid rgba(52, 211, 153, 0.25);
+}
+
+.submitBtn {
+  width: 100%;
+  padding: 15px;
+  margin-top: 6px;
+  border: none;
+  border-radius: 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  cursor: pointer;
+  color: #fff;
+  background: linear-gradient(135deg, #7c3aed, #a78bfa);
+  box-shadow: 0 12px 32px rgba(124, 58, 237, 0.45);
+  transition: opacity 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.btnShimmer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent);
+  pointer-events: none;
+  will-change: transform;
+}
+
+.btnProgress {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.08);
+  transform-origin: left center;
+  pointer-events: none;
+}
+
+.dotsWrap {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 1px;
+}
+
+.submitBtn:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+  box-shadow: none;
+}
+
+@media (max-width: 480px) {
+  .field input {
+    padding: 13px 40px 13px 38px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btnShimmer,
+  .focusRing,
+  .msgPulse {
+    display: none;
+  }
+}
